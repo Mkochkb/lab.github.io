@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O nas | KID KIBLA</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* KIBLA Brand Colors */
+            --hr-red: #E91E24;
+            --bg-color: #060809;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --panel-bg: rgba(255, 255, 255, 0.02);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --section-bg: #0b0e10;
+            --heading-color: #ffffff;
+            --icon-color: #ffffff;
+        }
+
+        .light-mode {
+            --bg-color: #f9fafb;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --panel-bg: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --section-bg: #ffffff;
+            --heading-color: #111827;
+            --icon-color: #111827;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main);
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .text-theme-heading { color: var(--heading-color); }
+        .text-theme-muted { color: var(--text-muted); }
+
+        /* Glass Components */
+        .glass-nav {
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            right: 24px;
+            top: 100px;
+            z-index: 100;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            color: var(--icon-color);
+        }
+
+        #theme-toggle:hover {
+            border-color: var(--hr-red);
+            color: var(--hr-red);
+        }
+
+        .toggle-icon { width: 20px; height: 20px; stroke-width: 1.5; }
+        .light-mode .icon-moon { display: block; }
+        .light-mode .icon-sun { display: none; }
+        .icon-moon { display: none; }
+        .icon-sun { display: block; }
+
+        /* Partners Styles */
+        .partner-group h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--hr-red);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .partner-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem 2rem;
+        }
+
+        .partner-item {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .partner-item:hover {
+            opacity: 1;
+            color: var(--heading-color);
+        }
+
+        /* Mobile Menu */
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #mobile-menu.open {
+            max-height: 500px;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <button id="theme-toggle" onclick="toggleTheme()" title="Preklopi način">
+        <svg class="toggle-icon icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+        <svg class="toggle-icon icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+    </button>
+
+    <nav class="fixed w-full z-50 glass-nav top-0">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <a href="index.html" class="flex items-center space-x-2 group">
+                    <div class="w-8 h-8 bg-[#E91E24] rounded-sm flex items-center justify-center font-bold text-white group-hover:bg-white group-hover:text-[#E91E24] transition">K</div>
+                    <span class="text-xl font-extrabold tracking-tight text-theme-heading">KIBLA</span>
+                </a>
+            </div>
+
+            <div class="hidden md:flex space-x-10 text-sm font-semibold tracking-wide uppercase">
+                <a href="index.html#news" class="text-theme-muted hover:text-[#E91E24] transition">Novice</a>
+                <a href="index.html#exhibitions" class="text-theme-muted hover:text-[#E91E24] transition">Razstave</a>
+                <a href="index.html#projects" class="text-theme-muted hover:text-[#E91E24] transition">Projekti</a>
+                <a href="index.html#venues" class="text-theme-muted hover:text-[#E91E24] transition">Razstavišča</a>
+                <a href="3dscan.html" class="text-theme-muted hover:text-[#E91E24] transition">LAB</a>
+                <a href="about.html" class="text-theme-muted hover:text-[#E91E24] transition">O nas</a>
+            </div>
+
+            <div class="md:hidden">
+                <button onclick="toggleMobileMenu()" class="text-theme-heading focus:outline-none p-2">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden w-full glass-nav border-t border-[var(--border-color)]">
+            <div class="flex flex-col space-y-4 px-6 py-6 text-center text-sm font-semibold tracking-wide uppercase">
+                <a href="index.html#news" class="text-theme-muted hover:text-[#E91E24] transition block">Novice</a>
+                <a href="index.html#exhibitions" class="text-theme-muted hover:text-[#E91E24] transition block">Razstave</a>
+                <a href="index.html#projects" class="text-theme-muted hover:text-[#E91E24] transition block">Projekti</a>
+                <a href="index.html#venues" class="text-theme-muted hover:text-[#E91E24] transition block">Razstavišča</a>
+                <a href="#" class="text-[#E91E24] transition block">O nas</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative w-full h-[50vh] flex items-center justify-center pt-20">
+        <div class="absolute inset-0 w-full h-full">
+            <img src="src/2.jpg" alt="About KIBLA" class="w-full h-full object-cover opacity-30 grayscale">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-color)] via-[var(--bg-color)]/50 to-transparent"></div>
+        </div>
+        
+        <div class="relative z-10 text-center max-w-5xl px-6">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 text-theme-heading tracking-tighter">
+                O NAS
+            </h1>
+            <p class="text-lg md:text-xl text-theme-muted font-light max-w-2xl mx-auto">
+                KID KIBLA – 1996 do danes.
+            </p>
+        </div>
+    </header>
+
+    <main class="py-20">
+        
+        <section class="max-w-7xl mx-auto px-6 mb-24">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <div class="lg:col-span-4 space-y-8">
+                    <div class="glass-panel p-8 rounded-xl">
+                        <h3 class="text-xl font-bold mb-4 text-theme-heading">Identiteta</h3>
+                        <p class="text-sm text-theme-muted leading-relaxed mb-4">
+                            KID KIBLA je slovenska in mednarodna nevladna institucija na področju kreativnih industrij, intermedijske umetnosti, kulture in neformalnega izobraževanja.
+                        </p>
+                        <ul class="text-sm space-y-2 text-theme-muted">
+                            <li><strong class="text-[#E91E24]">Ustanovitev MMC:</strong> 4. julij 1996</li>
+                            <li><strong class="text-[#E91E24]">Ustanovitev KID:</strong> 1998</li>
+                            <li><strong class="text-[#E91E24]">Sedež:</strong> Maribor, Slovenija</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-xl">
+                        <h3 class="text-xl font-bold mb-4 text-theme-heading">Fokus</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs uppercase tracking-wider text-theme-muted border border-[var(--border-color)]">Vizualna umetnost</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs uppercase tracking-wider text-theme-muted border border-[var(--border-color)]">Glasba</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs uppercase tracking-wider text-theme-muted border border-[var(--border-color)]">Tehnologija</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs uppercase tracking-wider text-theme-muted border border-[var(--border-color)]">Založništvo</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs uppercase tracking-wider text-theme-muted border border-[var(--border-color)]">Izobraževanje</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 text-theme-muted font-light leading-relaxed space-y-6 text-lg">
+                    <h2 class="text-3xl font-bold text-theme-heading mb-6">Zgodovina in Poslanstvo</h2>
+                    <p>
+                        KIBLA predstavlja, prireja, producira, koproducira, dokumentira in arhivira kulturno-umetniške projekte ter elektronske in tiskane izdaje v zbirki <strong>TOX</strong> (od 1995) in reviji <strong>Folio</strong> (od 2009).
+                    </p>
+                    <p>
+                        V prostorih na Ulici kneza Koclja 9 v Mariboru se nahaja multimedijski center s <strong>CyberSRCe-m</strong>, prostorom za umetnost <strong>KiBela</strong>, večnamensko dvorano za performanse, koncerte, festivale in gledališke predstave ter knjigarno in čitalnico za sodobno umetnost.
+                    </p>
+                    <p>
+                        Leta 1996 smo ustanovili <strong>Multimedijski center (MMC) KIBLA</strong>, ki se je razvil v osrednjo točko za digitalno kulturo v regiji. V okviru programa Komunikacijsko informacijska točka <strong>KIT</strong> (Glavni trg 14) pa ponujamo informacijsko, svetovalno in izobraževalno dejavnost.
+                    </p>
+                    <p>
+                        S festivali, kot sta <strong>KIBLIX</strong> (IT Linux festival odprte kode) in <strong>MFRU</strong> (Mednarodni festival računalniške umetnosti), povezujemo znanost, tehnologijo in umetnost ter spodbujamo kritični razmislek o sodobni družbi.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="border-t border-[var(--border-color)] bg-[var(--section-bg)] pt-16 pb-24 transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-sm font-bold uppercase tracking-[0.2em] text-theme-muted opacity-50">Naši Partnerji & Podporniki</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    
+                    <div class="partner-group">
+                        <h4>Financerji</h4>
+                        <div class="partner-list">
+                            <span class="partner-item">Mestna občina Maribor</span>
+                            <span class="partner-item">Ministrstvo za kulturo RS</span>
+                            <span class="partner-item">Ministrstvo za delo, družino, socialne zadeve in enake možnosti</span>
+                            <span class="partner-item">Urad RS za mladino</span>
+                            <span class="partner-item">Zavod RS za zaposlovanje</span>
+                            <span class="partner-item">Evropska unija (Kultura 2000, Kultura, Ustvarjalna Evropa)</span>
+                            <span class="partner-item">Erasmus+</span>
+                            <span class="partner-item">Evropski sklad za regionalni razvoj</span>
+                        </div>
+                    </div>
+
+                    <div class="partner-group">
+                        <h4>Mreže in Projekti</h4>
+                        <div class="partner-list">
+                            <span class="partner-item">Mreža RUK</span>
+                            <span class="partner-item">DDT - Delavski dom Trbovlje</span>
+                            <span class="partner-item">PiNA</span>
+                            <span class="partner-item">X-OP</span>
+                            <span class="partner-item">CodeBlue</span>
+                            <span class="partner-item">HPC RIVR</span>
+                            <span class="partner-item">HEMI (Hub for Exchange of Music Innovation)</span>
+                            <span class="partner-item">VETLICAT</span>
+                            <span class="partner-item">E-AGORA</span>
+                            <span class="partner-item">Mreža centrov raziskovalne umetnosti in kulture</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-20 border-t border-[var(--border-color)] text-center">
+        <div class="flex items-center justify-center space-x-2 mb-8">
+            <span class="text-3xl font-extrabold tracking-tight uppercase text-theme-heading">KIBLA</span>
+        </div>
+        
+        <div class="text-theme-muted text-sm space-y-2 mb-8 font-light">
+            <p>Ulica kneza Koclja 9, 2000 Maribor, Slovenija</p>
+            <p>kibla@kibla.org | +386 59 076 371</p>
+        </div>
+
+        <p class="text-theme-muted text-xs tracking-widest uppercase opacity-60">© 2024 KID KIBLA.</p>
+    </footer>
+
+    <script>
+        // --- THEME LOGIC ---
+        function loadTheme() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+            }
+        }
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('light-mode');
+            if (body.classList.contains('light-mode')) {
+                localStorage.setItem('theme', 'light');
+            } else {
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // --- MOBILE MENU ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('open');
+        }
+
+        loadTheme();
+    </script>
+
+</body>
+</html>
