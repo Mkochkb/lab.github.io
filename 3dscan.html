@@ -177,6 +177,24 @@
         .light-mode .input-field:focus {
             background: rgba(0, 0, 0, 0.05);
         }
+
+        /* Mobile Dropdown Logic */
+        @media (min-width: 768px) {
+            details.mobile-dropdown > summary {
+                pointer-events: none;
+                cursor: default;
+            }
+            details.mobile-dropdown:not([open]) > *:not(summary) {
+                display: block;
+            }
+            details.mobile-dropdown {
+                display: flex;
+                flex-direction: column-reverse;
+            }
+            details.mobile-dropdown summary .arrow {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -237,30 +255,52 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="glass-panel p-2 rounded-lg">
-                <model-viewer src="src/kipec.glb" auto-rotate camera-controls shadow-intensity="1" style="width: 100%; height: 300px;"></model-viewer>
-                <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-theme-heading">Fotogrametrija</h3>
-                </div>
+                <details class="mobile-dropdown group">
+                    <summary class="p-6 text-center cursor-pointer md:cursor-auto list-none flex justify-center items-center gap-2">
+                        <h3 class="text-xl font-bold uppercase tracking-wide text-theme-heading">Fotogrametrija</h3>
+                        <span class="arrow md:hidden transition-transform duration-300">↓</span>
+                    </summary>
+                    <model-viewer src="src/kipec.glb" auto-rotate camera-controls shadow-intensity="1" style="width: 100%; height: 300px;"></model-viewer>
+                </details>
             </div>
 
             <div class="glass-panel p-2 rounded-lg">
-                <model-viewer src="src/sekira.glb" auto-rotate camera-controls shadow-intensity="1" style="width: 100%; height: 300px;"></model-viewer>
-                <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-theme-heading">3D modeliranje</h3>
-                </div>
+                <details class="mobile-dropdown group">
+                    <summary class="p-6 text-center cursor-pointer md:cursor-auto list-none flex justify-center items-center gap-2">
+                        <h3 class="text-xl font-bold uppercase tracking-wide text-theme-heading">3D modeliranje</h3>
+                        <span class="arrow md:hidden transition-transform duration-300">↓</span>
+                    </summary>
+                    <model-viewer src="src/sekira.glb" auto-rotate camera-controls shadow-intensity="1" style="width: 100%; height: 300px;"></model-viewer>
+                </details>
             </div>
 
             <div class="glass-panel p-2 rounded-lg">
-                <div id="panorama" style="width: 100%; height: 300px; border-radius: 8px;"></div>
-                
-                <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-theme-heading">360° virtualizacija</h3>
-                </div>
+                <details class="mobile-dropdown group" ontoggle="if(this.open) setTimeout(() => window.dispatchEvent(new Event('resize')), 100)">
+                    <summary class="p-6 text-center cursor-pointer md:cursor-auto list-none flex justify-center items-center gap-2">
+                        <h3 class="text-xl font-bold uppercase tracking-wide text-theme-heading">360° virtualizacija</h3>
+                        <span class="arrow md:hidden transition-transform duration-300">↓</span>
+                    </summary>
+                    <div id="panorama" style="width: 100%; height: 300px; border-radius: 8px;"></div>
+                </details>
             </div>
         </div>
     </div>
 
     <script>
+        let wasDesktop = window.innerWidth >= 768;
+
+        function checkDropdowns() {
+            const isDesktop = window.innerWidth >= 768;
+            if (isDesktop) {
+                document.querySelectorAll('details.mobile-dropdown').forEach(d => d.setAttribute('open', ''));
+            } else if (wasDesktop) {
+                document.querySelectorAll('details.mobile-dropdown').forEach(d => d.removeAttribute('open'));
+            }
+            wasDesktop = isDesktop;
+        }
+        window.addEventListener('resize', checkDropdowns);
+        checkDropdowns();
+
         pannellum.viewer('panorama', {
             "type": "equirectangular",
             "panorama": "src/360.jpg", "autoLoad": true,
@@ -344,11 +384,11 @@
 
     <section id="tech" class="py-32">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold mb-16 italic text-center uppercase text-theme-heading">Tehnologija <span class="text-[#E91E24]">zajema</span></h2>
+            <h2 class="text-5xl font-extrabold mb-16 italic text-center uppercase text-theme-heading">Tehno<wbr>logija <span class="text-[#E91E24]">zajema</span></h2>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div class="red-glass-card p-10">
-                    <h3 class="text-3xl font-bold mb-6 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">Fotogrametrija</h3>
+                    <h3 class="text-3xl font-bold mb-6 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">Foto<wbr>grametrija</h3>
                     <p class="text-theme-muted mb-6 leading-relaxed">Metoda 3D zajema, ki temelji na računalniški analizi večjega števila prekrivajočih se fotografij posnetih iz več zornih kotov objekta. Programska oprema prepozna skupne točke na slikah in iz njih izračuna prostorsko geometrijo objekta, hkrati pa ustvari barvno teksturo.</p>
                     
                     <div class="space-y-6 text-sm">
@@ -417,7 +457,7 @@
 
     <section id="usage" class="py-32" style="background-color: var(--section-bg); transition: background 0.4s ease;">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold mb-16 italic text-center uppercase text-theme-heading">Uporaba in <span class="text-[#E91E24]">Interpretacija</span></h2>
+            <h2 class="text-5xl font-extrabold mb-16 italic text-center uppercase text-theme-heading">Uporaba in <span class="text-[#E91E24]">Inter<wbr>pretacija</span></h2>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 
@@ -546,13 +586,13 @@
                         <span class="text-xs font-bold uppercase tracking-widest text-theme-muted">Dodaj sliko (neobvezno)</span>
                         <div class="flex items-center gap-4 pt-1">
                             <input type="file" id="priponka" name="priponka" class="hidden" accept="image/*" onchange="document.getElementById('file-name').textContent = this.files[0] ? this.files[0].name : 'Ni izbrane datoteke'">
-                            <label for="priponka" class="cursor-pointer px-8 py-3 bg-[#E91E24] text-white font-bold uppercase tracking-widest rounded-lg hover:bg-red-700 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/20 text-sm">Naloži</label>
+                            <label for="priponka" class="cursor-pointer px-8 py-3 bg-red-900 text-white font-bold uppercase tracking-widest rounded-lg hover:bg-red-800 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-900/20 text-sm">Naloži</label>
                             <span id="file-name" class="text-theme-muted text-sm italic">Ni izbrane datoteke</span>
                         </div>
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="px-10 py-4 bg-[#E91E24] text-white font-bold uppercase tracking-widest rounded-lg hover:bg-red-700 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/20">
+                        <button type="submit" class="w-full md:w-auto px-8 py-3 bg-[#E91E24] text-white font-bold uppercase tracking-widest rounded-lg hover:bg-red-700 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/20 text-sm">
                             Pošlji
                         </button>
                     </div>
