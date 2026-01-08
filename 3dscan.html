@@ -6,7 +6,10 @@
     <title>KIBLA2LAB | 3D Scanning for Cultural Heritage</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -134,6 +137,46 @@
             background-color: rgba(0,0,0,0.02);
             --poster-color: transparent;
         }
+
+        /* Invert Pannellum controls to Black & White */
+        .pnlm-controls-container, 
+        .pnlm-load-button, 
+        .pnlm-compass, 
+        .pnlm-panorama-info {
+            filter: invert(100%);
+        }       
+
+        /* Optional: If you want the 'Load' button to look cleaner */
+        .pnlm-load-button {
+         background-color: rgba(255, 255, 255, 0.8) !important;
+            color: #000 !important;
+        }
+
+        /* Form Inputs */
+        .input-field {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--hr-red);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 4px rgba(233, 30, 36, 0.1);
+        }
+
+        .light-mode .input-field {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .light-mode .input-field:focus {
+            background: rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -172,7 +215,7 @@
 
     <header class="relative w-full h-[80vh] flex items-center justify-center pt-20">
         <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-30">
-            <source src="src/test.mp4" type="video/mp4">
+            <source src="src/bgvid.mp4" type="video/mp4">
         </video>
         
         <div class="relative z-10 text-center max-w-5xl px-6">
@@ -186,38 +229,50 @@
     </header>
 
     <section id="showcase" class="py-32" style="background-color: var(--section-bg); transition: background 0.4s ease;">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-20">
-                <span class="text-[#E91E24] font-bold tracking-[0.2em] uppercase text-sm">Vizualizacija</span>
-                <h2 class="text-4xl md:text-5xl font-extrabold mt-2 italic tracking-tight text-theme-heading">DIGITALNI ARHIV</h2>
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-20">
+            <span class="text-[#E91E24] font-bold tracking-[0.2em] uppercase text-sm">Vizualizacija</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold mt-2 italic tracking-tight text-theme-heading">DIGITALNI ARHIV</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="glass-panel p-2 rounded-lg">
+                <model-viewer src="src/kipec.glb" auto-rotate camera-controls shadow-intensity="1" style="width: 100%; height: 300px;"></model-viewer>
+                <div class="p-6 text-center">
+                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-theme-heading">Fotogrametrija</h3>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="glass-panel p-2 rounded-lg">
-                    <model-viewer src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" auto-rotate camera-controls shadow-intensity="1"></model-viewer>
-                    <div class="p-6 text-center">
-                        <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-theme-heading">Fotogrametrija</h3>
-                    </div>
+            <div class="glass-panel p-2 rounded-lg">
+                <model-viewer src="src/sekira.glb" auto-rotate camera-controls shadow-intensity="1" style="width: 100%; height: 300px;"></model-viewer>
+                <div class="p-6 text-center">
+                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-theme-heading">3D modeliranje</h3>
                 </div>
-                <div class="glass-panel p-2 rounded-lg">
-                    <model-viewer src="https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb" auto-rotate camera-controls shadow-intensity="1"></model-viewer>
-                    <div class="p-6 text-center">
-                        <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-theme-heading">Artefakti</h3>
-                    </div>
-                </div>
-                <div class="glass-panel p-2 rounded-lg">
-                    <model-viewer src="https://modelviewer.dev/shared-assets/models/Horse.glb" auto-rotate camera-controls shadow-intensity="1"></model-viewer>
-                    <div class="p-6 text-center">
-                        <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-theme-heading">3D Skeniranje</h3>
-                    </div>
+            </div>
+
+            <div class="glass-panel p-2 rounded-lg">
+                <div id="panorama" style="width: 100%; height: 300px; border-radius: 8px;"></div>
+                
+                <div class="p-6 text-center">
+                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-theme-heading">360° virtualizacija</h3>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <script>
+        pannellum.viewer('panorama', {
+            "type": "equirectangular",
+            "panorama": "src/360.jpg", "autoLoad": true,
+            "compass": false,
+            "showControls": true
+        });
+    </script>
+</section>
 
     <section id="about" class="py-32">
         <div class="max-w-5xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold mb-12 tracking-tight text-theme-heading">O PROJEKTU</h2>
+            <h2 class="text-5xl font-extrabold mb-12 tracking-tight text-theme-heading">KIBLA2LAB</h2>
             <div class="space-y-8 text-lg font-light border-l-4 border-[#E91E24] pl-8 text-theme-muted">
                 <p>KIBLA2LAB je mednarodno usmerjen razvojni laboratorij, ki se ukvarja z digitalizacijo materialne kulturne dediščine ter razvojem digitalnih vsebin za njeno dolgoročno ohranjanje, sodobno interpretacijo in večjo dostopnost javnosti.</p>
                 <p>Z uporabo naprednih metod fotogrametrije, laserskega 3D skeniranja in prostorskega zajema kulturno dediščino pretvarjamo v kakovostne digitalne zapise, namenjene uporabi v kulturi, izobraževanju, turizmu in javnem prostoru.</p>
@@ -456,6 +511,43 @@
                     </details>
                 </div>
 
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-32">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-extrabold mb-6 uppercase tracking-tighter text-theme-heading">Kontakt</h2>
+                <p class="text-xl font-light text-theme-muted">
+                    Kontaktirajte nas, da skupaj določimo najboljšo strategijo.
+                </p>
+            </div>
+
+            <div class="glass-panel p-8 md:p-12 rounded-xl">
+                <form action="mailto:kibla@kibla.org" method="POST" enctype="text/plain" class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label for="ime" class="text-xs font-bold uppercase tracking-widest text-theme-muted">Ime</label>
+                            <input type="text" id="ime" name="ime" class="input-field" placeholder="Janez Novak" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label for="email" class="text-xs font-bold uppercase tracking-widest text-theme-muted">E-pošta</label>
+                            <input type="email" id="email" name="email" class="input-field" placeholder="janez@primer.si" required>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label for="sporocilo" class="text-xs font-bold uppercase tracking-widest text-theme-muted">Sporočilo</label>
+                        <textarea id="sporocilo" name="sporocilo" rows="5" class="input-field" placeholder="Vaše sporočilo..." required></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="px-10 py-4 bg-[#E91E24] text-white font-bold uppercase tracking-widest rounded-lg hover:bg-red-700 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/20">
+                            Pošlji
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
