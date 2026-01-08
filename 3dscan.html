@@ -542,6 +542,15 @@
                         <textarea id="sporocilo" name="sporocilo" rows="5" class="input-field" placeholder="Vaše sporočilo..." required></textarea>
                     </div>
 
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-theme-muted">Dodaj sliko (neobvezno)</span>
+                        <div class="flex items-center gap-4 pt-1">
+                            <input type="file" id="priponka" name="priponka" class="hidden" accept="image/*" onchange="document.getElementById('file-name').textContent = this.files[0] ? this.files[0].name : 'Ni izbrane datoteke'">
+                            <label for="priponka" class="cursor-pointer px-8 py-3 bg-[#E91E24] text-white font-bold uppercase tracking-widest rounded-lg hover:bg-red-700 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/20 text-sm">Naloži</label>
+                            <span id="file-name" class="text-theme-muted text-sm italic">Ni izbrane datoteke</span>
+                        </div>
+                    </div>
+
                     <div class="text-center">
                         <button type="submit" class="px-10 py-4 bg-[#E91E24] text-white font-bold uppercase tracking-widest rounded-lg hover:bg-red-700 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/20">
                             Pošlji
