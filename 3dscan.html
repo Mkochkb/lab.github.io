@@ -224,9 +224,9 @@
 
             <div class="hidden md:flex space-x-10 text-sm font-semibold tracking-wide uppercase">
                 <a href="#about" class="text-theme-muted hover:text-[#E91E24] transition">O nas</a>
-                <a href="#showcase" class="text-theme-muted hover:text-[#E91E24] transition">3D Modeli</a>
                 <a href="#services" class="text-theme-muted hover:text-[#E91E24] transition">Storitve</a>
                 <a href="#tech" class="text-theme-muted hover:text-[#E91E24] transition">Tehnologija</a>
+                <a href="#contact" class="text-theme-muted hover:text-[#E91E24] transition">Kontakt</a>
             </div>
         </div>
     </nav>
@@ -301,11 +301,59 @@
         window.addEventListener('resize', checkDropdowns);
         checkDropdowns();
 
+        let scenes = {
+            "scene1": {
+                "type": "equirectangular",
+                "panorama": "src/360/360_1.jpg",
+                "hotSpots": [
+                    {
+                        "pitch": -16.30097527148113,
+                        "yaw": -120.28990170906505,
+                        "type": "scene",
+                        "text": "Naslednja",
+                        "sceneId": "scene2"
+                    }
+                ]
+            },
+            "scene2": {
+                "type": "equirectangular",
+                "panorama": "src/360/360_2.jpg",
+                "hotSpots": [
+                    {
+                        "pitch": -23.312727430227397,
+                        "yaw": -23.958653670468003,
+                        "type": "scene",
+                        "text": "Naslednja",
+                        "sceneId": "scene3"
+                    }
+                ]
+            },
+            "scene3": {
+                "type": "equirectangular",
+                "panorama": "src/360/360_3.jpg",
+                "hotSpots": [
+                    {
+                        "pitch": -12.812866450249254,
+                        "yaw": 37.12667313759234,
+                        "type": "scene",
+                        "text": "Naslednja",
+                        "sceneId": "scene1"
+                    }
+                ]
+            }
+        };
+
         pannellum.viewer('panorama', {
-            "type": "equirectangular",
-            "panorama": "src/360.jpg", "autoLoad": true,
-            "compass": false,
-            "showControls": true
+            "default": {
+                "firstScene": "scene1",
+                "author": "KIBLA2LAB",
+                "sceneFadeDuration": 1000,
+                "autoLoad": true,
+                "compass": false,
+                "showControls": true,
+                "hotSpotDebug": true
+            },
+            "scenes": scenes
         });
     </script>
 </section>
@@ -332,7 +380,7 @@
 
     <section id="services" class="py-32" style="background-color: var(--section-bg); transition: background 0.4s ease;">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold mb-16 text-center uppercase tracking-tighter text-theme-heading">Naše <span class="text-[#E91E24]">Storitve</span></h2>
+            <h2 class="text-5xl font-extrabold mb-16 text-center uppercase tracking-tighter text-theme-heading">DIGITALNA <span class="text-[#E91E24]">DEDIŠČINA</span></h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
@@ -449,7 +497,8 @@
                     Kombinirana raba fotogrametrije in 3D skeniranja združuje prednosti obeh pristopov. V praksi se 3D skeniranje uporablja za natančen zajem oblike, fotogrametrija pa za dodajanje barvne in materialne informacije. Omogoča celostno digitalno dokumentiranje, primerno za zahtevnejše in dolgoročne projekte.
                 </p>
                 <div class="text-xs text-red-500 font-bold uppercase tracking-widest">
-                    Specifike opreme: večja časovna, organizacijska in finančna zahtevnost.
+                    Specifike opreme:
+                    <p class="text-theme-muted leading-relaxed font-light mb-6">večja časovna, organizacijska in finančna zahtevnost.</p>
                 </div>
             </div>
         </div>
