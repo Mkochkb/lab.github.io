@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KIBLA2LAB | 3D Scanning for Cultural Heritage</title>
+    <title>KID KIBLA | Umetnost, Znanost, Tehnologija</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
-
+    
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* Dark Mode Variables (Default) */
+            /* KIBLA Brand Colors mapped to Theme */
             --hr-red: #E91E24;
             --bg-color: #060809;
             --text-main: #ffffff;
@@ -30,7 +27,6 @@
         }
 
         .light-mode {
-            /* Light Mode Variables */
             --bg-color: #f9fafb;
             --text-main: #111827;
             --text-muted: #4b5563;
@@ -50,11 +46,11 @@
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* Typography Utility Classes */
+        /* Typography */
         .text-theme-heading { color: var(--heading-color); transition: color 0.4s ease; }
         .text-theme-muted { color: var(--text-muted); transition: color 0.4s ease; }
 
-        /* Generic Glass Panel */
+        /* Glass Components */
         .glass-panel {
             background: var(--panel-bg);
             backdrop-filter: blur(12px);
@@ -68,7 +64,7 @@
             background: var(--card-hover-bg);
         }
 
-        /* Specific Glass Nav - NO top border, NO hover border change to prevent shift */
+        /* Navigation */
         .glass-nav {
             background: var(--panel-bg);
             backdrop-filter: blur(12px);
@@ -77,14 +73,7 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
-        .red-glass-card {
-            background: rgba(233, 30, 36, 0.05);
-            border: 1px solid rgba(233, 30, 36, 0.2);
-            border-radius: 12px;
-            backdrop-filter: blur(5px);
-        }
-
-        /* Minimalistic Toggle Button */
+        /* Theme Toggle */
         #theme-toggle {
             position: fixed;
             right: 24px;
@@ -110,563 +99,328 @@
             color: var(--hr-red);
         }
 
-        .toggle-icon {
-            width: 20px;
-            height: 20px;
-            stroke-width: 1.5;
-            transition: transform 0.5s ease, opacity 0.3s ease;
-        }
-
+        .toggle-icon { width: 20px; height: 20px; stroke-width: 1.5; transition: transform 0.5s ease; }
         .light-mode .icon-moon { display: block; }
         .light-mode .icon-sun { display: none; }
-        
         .icon-moon { display: none; }
         .icon-sun { display: block; }
 
-        details summary { list-style: none; outline: none; }
-        details summary::-webkit-details-marker { display: none; }
-        
-        details[open] summary .arrow {
-            transform: rotate(180deg);
-            color: var(--hr-red);
+        /* Mobile Menu Animation */
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
         }
-
-        model-viewer {
-            width: 100%;
-            height: 400px;
-            background-color: rgba(0,0,0,0.02);
-            --poster-color: transparent;
-        }
-
-        /* Invert Pannellum controls to Black & White */
-        .pnlm-controls-container, 
-        .pnlm-load-button, 
-        .pnlm-compass, 
-        .pnlm-panorama-info {
-            filter: invert(100%);
-        }       
-
-        /* Optional: If you want the 'Load' button to look cleaner */
-        .pnlm-load-button {
-         background-color: rgba(255, 255, 255, 0.8) !important;
-            color: #000 !important;
-        }
-
-        /* Form Inputs */
-        .input-field {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px 16px;
-            color: var(--text-main);
-            transition: all 0.3s ease;
-        }
-        
-        .input-field:focus {
-            outline: none;
-            border-color: var(--hr-red);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 0 4px rgba(233, 30, 36, 0.1);
-        }
-
-        .light-mode .input-field {
-            background: rgba(0, 0, 0, 0.03);
-        }
-
-        .light-mode .input-field:focus {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        /* Mobile Dropdown Logic */
-        @media (min-width: 768px) {
-            details.mobile-dropdown > summary {
-                pointer-events: none;
-                cursor: default;
-            }
-            details.mobile-dropdown:not([open]) > *:not(summary) {
-                display: block;
-            }
-            details.mobile-dropdown {
-                display: flex;
-                flex-direction: column-reverse;
-            }
-            details.mobile-dropdown summary .arrow {
-                display: none;
-            }
+        #mobile-menu.open {
+            max-height: 500px;
+            opacity: 1;
         }
     </style>
 </head>
 <body class="antialiased">
 
     <button id="theme-toggle" onclick="toggleTheme()" title="Preklopi način">
-        <svg class="toggle-icon icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-        <svg class="toggle-icon icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
+        <svg class="toggle-icon icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+        <svg class="toggle-icon icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
     </button>
 
     <nav class="fixed w-full z-50 glass-nav top-0">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-            
-            <div class="flex items-center gap-8">
-                <a href="index.html" class="flex items-center space-x-2 group">
-                    <div class="w-8 h-8 bg-[#E91E24] rounded-sm flex items-center justify-center font-bold text-white group-hover:bg-white group-hover:text-[#E91E24] transition">K</div>
-                    <span class="text-xl font-extrabold tracking-tight text-theme-heading">KIBLA2LAB</span>
-                </a>
-                
-                <!-- Vrni, ko bo kibla spletna stran.
-                <a href="index.html" class="hidden md:flex items-center text-xs font-bold uppercase tracking-widest text-theme-muted hover:text-[#E91E24] transition gap-2 group">
-                    <span class="transform group-hover:-translate-x-1 transition">←</span> Nazaj na prvo stran
-                </a> -->
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-[#E91E24] rounded-sm flex items-center justify-center font-bold text-white">K</div>
+                <span class="text-xl font-extrabold tracking-tight text-theme-heading">KIBLA</span>
             </div>
 
             <div class="hidden md:flex space-x-10 text-sm font-semibold tracking-wide uppercase">
-                <a href="#about" class="text-theme-muted hover:text-[#E91E24] transition">O nas</a>
-                <a href="#services" class="text-theme-muted hover:text-[#E91E24] transition">Storitve</a>
-                <a href="#tech" class="text-theme-muted hover:text-[#E91E24] transition">Tehnologija</a>
-                <a href="#contact" class="text-theme-muted hover:text-[#E91E24] transition">Kontakt</a>
+                <a href="#news" class="text-theme-muted hover:text-[#E91E24] transition">Novice</a>
+                <a href="#exhibitions" class="text-theme-muted hover:text-[#E91E24] transition">Razstave</a>
+                <a href="#projects" class="text-theme-muted hover:text-[#E91E24] transition">Projekti</a>
+                <a href="#venues" class="text-theme-muted hover:text-[#E91E24] transition">Razstavišča</a>
+                <a href="3dscan.html" class="text-theme-muted hover:text-[#E91E24] transition">LAB</a>
+                <a href="about.html" class="text-theme-muted hover:text-[#E91E24] transition">O nas</a>
+            </div>
+
+            <div class="md:hidden">
+                <button onclick="toggleMobileMenu()" class="text-theme-heading focus:outline-none p-2">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden w-full glass-nav border-t border-[var(--border-color)]">
+            <div class="flex flex-col space-y-4 px-6 py-6 text-center text-sm font-semibold tracking-wide uppercase">
+                <a href="#news" class="text-theme-muted hover:text-[#E91E24] transition block" onclick="toggleMobileMenu()">Novice</a>
+                <a href="#exhibitions" class="text-theme-muted hover:text-[#E91E24] transition block" onclick="toggleMobileMenu()">Razstave</a>
+                <a href="#projects" class="text-theme-muted hover:text-[#E91E24] transition block" onclick="toggleMobileMenu()">Projekti</a>
+                <a href="#venues" class="text-theme-muted hover:text-[#E91E24] transition block" onclick="toggleMobileMenu()">Razstavišča</a>
+                <a href="3dscan.html" class="text-theme-muted hover:text-[#E91E24] transition block" onclick="toggleMobileMenu()">LAB</a>
+                <a href="about.html" class="text-theme-muted hover:text-[#E91E24] transition block" onclick="toggleMobileMenu()">O nas</a>
             </div>
         </div>
     </nav>
 
-    <header class="relative w-full h-[80vh] flex items-center justify-center pt-20">
+    <header class="relative w-full h-[70vh] flex items-center justify-center pt-20">
         <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-30">
-            <source src="src/bgvid.mp4" type="video/mp4">
+            <source src="src/conversion7.mp4" type="video/mp4">
         </video>
         
         <div class="relative z-10 text-center max-w-5xl px-6">
             <h1 class="text-6xl md:text-8xl font-extrabold mb-6 tracking-tighter text-theme-heading">
-                Prihodnost <span class="text-[#E91E24]">Dediščine</span>.
+                KID <span class="text-[#E91E24]">KIBLA</span>
             </h1>
-            <p class="text-xl md:text-2xl font-light max-w-2xl mx-auto leading-relaxed text-theme-muted">
-                Povezovanje kulture, znanosti in tehnologije za sodobno interpretacijo in dolgoročno ohranjanje.
+            <p class="text-xl md:text-2xl font-light max-w-3xl mx-auto leading-relaxed text-theme-muted">
+                Multimedijski center za umetnost, kulturo, izobraževanje in tehnologijo.
             </p>
         </div>
     </header>
 
-    <section id="showcase" class="py-32" style="background-color: var(--section-bg); transition: background 0.4s ease;">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="mb-20">
-            <span class="text-[#E91E24] font-bold tracking-[0.2em] uppercase text-sm">Vizualizacija</span>
-            <h2 class="text-4xl md:text-5xl font-extrabold mt-2 italic tracking-tight text-theme-heading">DIGITALNI ARHIV</h2>
-        </div>
+    <main>
+        <section id="news" class="py-24" style="background-color: var(--section-bg); transition: background 0.4s ease;">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex justify-between items-end mb-12">
+                    <div>
+                        <span class="text-[#E91E24] font-bold tracking-[0.2em] uppercase text-sm">Aktualno</span>
+                        <h2 class="text-4xl md:text-5xl font-extrabold mt-2 italic tracking-tight text-theme-heading">NOVICE</h2>
+                    </div>
+                    <a href="novice.html" class="hidden md:block text-sm font-bold uppercase text-theme-muted hover:text-[#E91E24] transition">Vse novice →</a>
+                </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="glass-panel p-2 rounded-lg">
-                <details class="mobile-dropdown group">
-                    <summary class="p-6 text-center cursor-pointer md:cursor-auto list-none flex justify-center items-center gap-2">
-                        <h3 class="text-xl font-bold uppercase tracking-wide text-theme-heading">Fotogrametrija</h3>
-                        <span class="arrow md:hidden transition-transform duration-300">↓</span>
-                    </summary>
-                    <model-viewer src="src/kipec.glb" auto-rotate camera-controls shadow-intensity="1" style="width: 100%; height: 300px;"></model-viewer>
-                </details>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <article class="glass-panel p-6 rounded-lg cursor-pointer group">
+                        <div class="h-48 bg-gray-800/50 rounded mb-4 overflow-hidden relative">
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                             <span class="absolute bottom-3 left-3 text-xs font-bold text-white bg-[#E91E24] px-2 py-1 rounded">Novo</span>
+                        </div>
+                        <span class="text-xs font-bold text-theme-muted uppercase tracking-widest">Dogodki</span>
+                        <h3 class="text-xl font-bold mt-2 mb-3 text-theme-heading group-hover:text-[#E91E24] transition">Otvoritev nove sezone</h3>
+                        <p class="text-sm text-theme-muted line-clamp-3">Vabljeni na otvoritev nove razstavne sezone v prostorih KiBele, kjer se predstavljajo sodobni intermedijski umetniki.</p>
+                    </article>
+
+                    <article class="glass-panel p-6 rounded-lg cursor-pointer group">
+                        <div class="h-48 bg-gray-800/50 rounded mb-4 overflow-hidden relative">
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <span class="text-xs font-bold text-theme-muted uppercase tracking-widest">Delavnice</span>
+                        <h3 class="text-xl font-bold mt-2 mb-3 text-theme-heading group-hover:text-[#E91E24] transition">KIBLIX Delavnica 2025</h3>
+                        <p class="text-sm text-theme-muted line-clamp-3">Pridružite se nam na seriji delavnic o uporabi umetne inteligence v kreativnih procesih.</p>
+                    </article>
+
+                    <article class="glass-panel p-6 rounded-lg cursor-pointer group">
+                        <div class="h-48 bg-gray-800/50 rounded mb-4 overflow-hidden relative">
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <span class="text-xs font-bold text-theme-muted uppercase tracking-widest">Razpis</span>
+                        <h3 class="text-xl font-bold mt-2 mb-3 text-theme-heading group-hover:text-[#E91E24] transition">Odprti poziv za umetnike</h3>
+                        <p class="text-sm text-theme-muted line-clamp-3">Objavljamo odprti poziv za sodelovanje na mednarodnem festivalu računalniške umetnosti MFRU.</p>
+                    </article>
+
+                    <article class="glass-panel p-6 rounded-lg cursor-pointer group">
+                        <div class="h-48 bg-gray-800/50 rounded mb-4 overflow-hidden relative">
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <span class="text-xs font-bold text-theme-muted uppercase tracking-widest">Razstava</span>
+                        <h3 class="text-xl font-bold mt-2 mb-3 text-theme-heading group-hover:text-[#E91E24] transition">KIBLA2LAB: Hibridni prostori</h3>
+                        <p class="text-sm text-theme-muted line-clamp-3">Predstavitev novih dosežkov laboratorija KIBLA2LAB na področju digitalizacije kulturne dediščine.</p>
+                    </article>
+
+                    <article class="glass-panel p-6 rounded-lg cursor-pointer group">
+                        <div class="h-48 bg-gray-800/50 rounded mb-4 overflow-hidden relative">
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <span class="text-xs font-bold text-theme-muted uppercase tracking-widest">Koncert</span>
+                        <h3 class="text-xl font-bold mt-2 mb-3 text-theme-heading group-hover:text-[#E91E24] transition">Zvočni eksperimenti: Noise Night</h3>
+                        <p class="text-sm text-theme-muted line-clamp-3">Večer eksperimentalne glasbe in zvočnih umetnosti v dvorani KiBela.</p>
+                    </article>
+
+                    <article class="glass-panel p-6 rounded-lg cursor-pointer group">
+                        <div class="h-48 bg-gray-800/50 rounded mb-4 overflow-hidden relative">
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <span class="text-xs font-bold text-theme-muted uppercase tracking-widest">Izobraževanje</span>
+                        <h3 class="text-xl font-bold mt-2 mb-3 text-theme-heading group-hover:text-[#E91E24] transition">Mladi in tehnologija</h3>
+                        <p class="text-sm text-theme-muted line-clamp-3">Zaključna razstava delavnic za mlade na temo 3D modeliranja in tiska.</p>
+                    </article>
+                </div>
             </div>
+        </section>
 
-            <div class="glass-panel p-2 rounded-lg">
-                <details class="mobile-dropdown group">
-                    <summary class="p-6 text-center cursor-pointer md:cursor-auto list-none flex justify-center items-center gap-2">
-                        <h3 class="text-xl font-bold uppercase tracking-wide text-theme-heading">3D modeliranje</h3>
-                        <span class="arrow md:hidden transition-transform duration-300">↓</span>
-                    </summary>
-                    <model-viewer src="src/sekira.glb" auto-rotate camera-controls shadow-intensity="1" style="width: 100%; height: 300px;"></model-viewer>
-                </details>
-            </div>
-
-            <div class="glass-panel p-2 rounded-lg">
-                <details class="mobile-dropdown group" ontoggle="if(this.open) setTimeout(() => window.dispatchEvent(new Event('resize')), 100)">
-                    <summary class="p-6 text-center cursor-pointer md:cursor-auto list-none flex justify-center items-center gap-2">
-                        <h3 class="text-xl font-bold uppercase tracking-wide text-theme-heading">360° virtualizacija</h3>
-                        <span class="arrow md:hidden transition-transform duration-300">↓</span>
-                    </summary>
-                    <div id="panorama" style="width: 100%; height: 300px; border-radius: 8px;"></div>
-                </details>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let wasDesktop = window.innerWidth >= 768;
-
-        function checkDropdowns() {
-            const isDesktop = window.innerWidth >= 768;
-            if (isDesktop) {
-                document.querySelectorAll('details.mobile-dropdown').forEach(d => d.setAttribute('open', ''));
-            } else if (wasDesktop) {
-                document.querySelectorAll('details.mobile-dropdown').forEach(d => d.removeAttribute('open'));
-            }
-            wasDesktop = isDesktop;
-        }
-        window.addEventListener('resize', checkDropdowns);
-        checkDropdowns();
-
-        let scenes = {
-            "scene1": {
-                "type": "equirectangular",
-                "panorama": "src/360/360_1.jpg",
-                "pitch": 3.04945396638314,
-                "yaw": 132.34445688291962,
-                "hotSpots": [
-                    {
-                        "pitch": -3.100495042780733,
-                        "yaw": -116.2129431256582,
-                        "type": "scene",
-                        "text": "Naslednja",
-                        "sceneId": "scene2"
-                    }
-                ]
-            },
-            "scene2": {
-                "type": "equirectangular",
-                "panorama": "src/360/360_2.jpg",
-                "pitch" : -27.736540885350745,
-                "yaw" : -81.4840039317395,
-                "hotSpots": [
-                    {
-                        "pitch": -27.733131587456633,
-                        "yaw": -41.076237110645856,
-                        "type": "scene",
-                        "text": "Naslednja",
-                        "sceneId": "scene3"
-                    }
-                ]
-            },
-            "scene3": {
-                "type": "equirectangular",
-                "panorama": "src/360/360_3.jpg",
-                "hotSpots": [
-                    {
-                        "pitch": -12.812866450249254,
-                        "yaw": 37.12667313759234,
-                        "type": "scene",
-                        "text": "Naslednja",
-                        "sceneId": "scene1"
-                    }
-                ]
-            }
-        };
-
-        pannellum.viewer('panorama', {
-            "default": {
-                "firstScene": "scene1",
-                "author": "KiBela - Gala Čaki",
-                "sceneFadeDuration": 1000,
-                "autoLoad": true,
-                "compass": false,
-                "showControls": true,
-                "hotSpotDebug": true
-            },
-            "scenes": scenes
-        });
-    </script>
-</section>
-
-    <section id="about" class="py-32">
-        <div class="max-w-5xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold mb-12 tracking-tight text-theme-heading">KIBLA2LAB</h2>
-            <div class="space-y-8 text-lg font-light border-l-4 border-[#E91E24] pl-8 text-theme-muted">
-                <p>KIBLA2LAB je mednarodno usmerjen razvojni laboratorij, ki se ukvarja z digitalizacijo materialne kulturne dediščine ter razvojem digitalnih vsebin za njeno dolgoročno ohranjanje, sodobno interpretacijo in večjo dostopnost javnosti.</p>
-                <p>Z uporabo naprednih metod fotogrametrije, laserskega 3D skeniranja in prostorskega zajema kulturno dediščino pretvarjamo v kakovostne digitalne zapise, namenjene uporabi v kulturi, izobraževanju, turizmu in javnem prostoru.</p>
-                <p>Posebno pozornost namenjamo natančnosti zajema, trajnosti digitalnih vsebin in njihovi prilagodljivosti različnim načinom uporabe. Pomemben del našega dela je razvoj sodobnih formatov digitalnega pripovedovanja zgodb (digital storytelling), vključno z interaktivnimi VR in AR izkušnjami.</p>
+        <section id="exhibitions" class="py-24">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="text-3xl font-bold mb-12 uppercase tracking-widest text-theme-heading border-l-4 border-[#E91E24] pl-4">Tekoče Razstave</h2>
                 
-                <div class="pt-8">
-                    <h4 class="text-theme-heading font-bold mb-4 uppercase text-sm tracking-widest">Ključna področja dela:</h4>
-                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm uppercase text-theme-muted">
-                        <li class="flex items-center"><span class="w-2 h-2 bg-red-600 mr-3"></span> fotogrametrija in lasersko 3D skeniranje</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-red-600 mr-3"></span> 3D modeliranje, rekonstrukcije in animacija</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-red-600 mr-3"></span> VR/AR aplikacije in interaktivne predstavitve</li>
-                        <li class="flex items-center"><span class="w-2 h-2 bg-red-600 mr-3"></span> Celostne rešitve pri izdelavi multimedijskih projetkov</li>
-                    </ul>
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="glass-panel p-0 rounded-xl overflow-hidden group flex-1">
+                        <div class="h-64 bg-neutral-800 relative">
+                            <img src="src/1.jpg" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition duration-500">
+                        </div>
+                        <div class="p-8">
+                            <span class="text-[#E91E24] text-xs font-bold uppercase tracking-widest">KiBela</span>
+                            <h3 class="text-2xl font-bold mt-2 mb-4 text-theme-heading">Samostojna razstava: [Ime Umetnika]</h3>
+                            <p class="text-theme-muted text-sm mb-6">Intermedijska postavitev, ki raziskuje meje digitalnega in fizičnega prostora.</p>
+                            <a href="exhibition.html" class="text-sm font-bold uppercase text-theme-heading border-b border-[#E91E24] pb-1 hover:text-[#E91E24] transition">Več o razstavi</a>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-0 rounded-xl overflow-hidden group flex-1">
+                        <div class="h-64 bg-neutral-800 relative">
+                             <img src="src/2.jpg" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition duration-500">
+                        </div>
+                        <div class="p-8">
+                            <span class="text-[#E91E24] text-xs font-bold uppercase tracking-widest">artKIT</span>
+                            <h3 class="text-2xl font-bold mt-2 mb-4 text-theme-heading">Skupinska razstava: [Naslov]</h3>
+                            <p class="text-theme-muted text-sm mb-6">Pregledna razstava sodobne grafike in ilustracije mlade generacije.</p>
+                            <a href="exhibition.html" class="text-sm font-bold uppercase text-theme-heading border-b border-[#E91E24] pb-1 hover:text-[#E91E24] transition">Več o razstavi</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="services" class="py-32" style="background-color: var(--section-bg); transition: background 0.4s ease;">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold mb-16 text-center uppercase tracking-tighter text-theme-heading">DIGITALNA <span class="text-[#E91E24]">DEDIŠČINA</span></h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <section id="projects" class="py-24" style="background-color: var(--section-bg); transition: background 0.4s ease;">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    
+                    <div>
+                        <h2 class="text-3xl font-bold mb-8 uppercase tracking-widest text-theme-heading border-l-4 border-[#E91E24] pl-4">Tekoči Projekti</h2>
+                        <div class="grid grid-cols-1 gap-4">
+                            <a href="#" class="glass-panel p-6 rounded-lg cursor-pointer hover:-translate-y-1 transition duration-300 group block">
+                                <h3 class="text-xl font-bold text-theme-heading group-hover:text-[#E91E24] transition">EkoKreatura</h3>
+                                <p class="text-sm text-theme-muted mt-2">Ekologija in ustvarjalnost v sožitju. Interdisciplinarni pristop k okoljski problematiki.</p>
+                                <span class="text-xs font-bold uppercase tracking-widest text-[#E91E24] mt-4 block opacity-0 group-hover:opacity-100 transition duration-300">Več o projektu →</span>
+                            </a>
+                            <a href="#" class="glass-panel p-6 rounded-lg cursor-pointer hover:-translate-y-1 transition duration-300 group block">
+                                <h3 class="text-xl font-bold text-theme-heading group-hover:text-[#E91E24] transition">Oasis</h3>
+                                <p class="text-sm text-theme-muted mt-2">Digitalne oaze v urbanem okolju. Raziskovanje mirnih točk v mestih s pomočjo AR.</p>
+                                <span class="text-xs font-bold uppercase tracking-widest text-[#E91E24] mt-4 block opacity-0 group-hover:opacity-100 transition duration-300">Več o projektu →</span>
+                            </a>
+                            <a href="#" class="glass-panel p-6 rounded-lg cursor-pointer hover:-translate-y-1 transition duration-300 group block">
+                                <h3 class="text-xl font-bold text-theme-heading group-hover:text-[#E91E24] transition">Digital on Stage</h3>
+                                <p class="text-sm text-theme-muted mt-2">Digitalizacija scenskih umetnosti. Implementacija novih tehnologij v gledališče.</p>
+                                <span class="text-xs font-bold uppercase tracking-widest text-[#E91E24] mt-4 block opacity-0 group-hover:opacity-100 transition duration-300">Več o projektu →</span>
+                            </a>
+                            <a href="#" class="glass-panel p-6 rounded-lg cursor-pointer hover:-translate-y-1 transition duration-300 group block">
+                                <h3 class="text-xl font-bold text-theme-heading group-hover:text-[#E91E24] transition">Smer: Kulturna dediščina</h3>
+                                <p class="text-sm text-theme-muted mt-2">Nove smeri ohranjanja dediščine s pomočjo 3D digitalizacije in interpretacije.</p>
+                                <span class="text-xs font-bold uppercase tracking-widest text-[#E91E24] mt-4 block opacity-0 group-hover:opacity-100 transition duration-300">Več o projektu →</span>
+                            </a>
+                            <a href="#" class="glass-panel p-6 rounded-lg cursor-pointer hover:-translate-y-1 transition duration-300 group block">
+                                <h3 class="text-xl font-bold text-theme-heading group-hover:text-[#E91E24] transition">Vključevanje otrok in družin</h3>
+                                <p class="text-sm text-theme-muted mt-2">Uporaba novih tehnologij v izobraževanju. Pedagoški programi za mlade.</p>
+                                <span class="text-xs font-bold uppercase tracking-widest text-[#E91E24] mt-4 block opacity-0 group-hover:opacity-100 transition duration-300">Več o projektu →</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 class="text-3xl font-bold mb-8 uppercase tracking-widest text-theme-heading border-l-4 border-gray-600 pl-4">Pretekli Projekti</h2>
+                        <div class="grid grid-cols-1 gap-4 opacity-80">
+                            <a href="#" class="glass-panel p-6 rounded-lg cursor-pointer hover:-translate-y-1 transition duration-300 group block border-gray-700/50">
+                                <h3 class="text-lg font-bold text-theme-heading group-hover:text-gray-400 transition">Digitalni dediščinski inkubator (DDI)</h3>
+                                <p class="text-xs text-theme-muted mt-2">Razvoj kompetenc na področju digitalizacije. Usposabljanje v kulturi.</p>
+                                <span class="text-xs font-bold uppercase tracking-widest text-[#E91E24] mt-4 block opacity-0 group-hover:opacity-100 transition duration-300">Več o projektu →</span>
+                            </a>
+                            <a href="#" class="glass-panel p-6 rounded-lg cursor-pointer hover:-translate-y-1 transition duration-300 group block border-gray-700/50">
+                                <h3 class="text-lg font-bold text-theme-heading group-hover:text-gray-400 transition">Virtualni multimodalni muzej (ViMM)</h3>
+                                <p class="text-xs text-theme-muted mt-2">Virtualna resničnost v muzejski praksi. Definiranje standardov za VR muzeje.</p>
+                                <span class="text-xs font-bold uppercase tracking-widest text-[#E91E24] mt-4 block opacity-0 group-hover:opacity-100 transition duration-300">Več o projektu →</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="venues" class="py-24">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="text-3xl font-bold mb-12 uppercase tracking-widest text-theme-heading text-center">Razstavišča</h2>
                 
-                <div class="glass-panel p-8 rounded-xl hover:border-[#E91E24] transition duration-300 group">
-                    <h3 class="text-xl font-bold mb-4 text-theme-heading uppercase tracking-wide group-hover:text-[#E91E24] transition">Digitizacija</h3>
-                    <p class="text-theme-muted text-sm leading-relaxed font-light">
-                        Izvajamo natančen digitalni zajem objektov, prostorov in drugih elementov dediščine z uporabo fotogrametrije, laserskega 3D skeniranja in prostorskih zajemov. Digitalni zajem predstavlja osnovo za nadaljnjo obdelavo, interpretacijo in uporabo v različnih kontekstih.
-                    </p>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <a href="kibela.html" class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition duration-300 block group">
+                        <h3 class="text-4xl font-extrabold text-theme-heading mb-6 group-hover:text-[#E91E24] transition-colors">KiBela</h3>
+                        <p class="text-xs font-bold uppercase tracking-widest text-theme-muted mb-4">Ulica kneza Koclja 9</p>
+                        <p class="text-theme-muted text-sm leading-relaxed">
+                            Prostor za umetnost. KiBela je prostor za vizualno in intermedijsko umetnost, kjer se prepletajo klasični in elektronski mediji.
+                        </p>
+                    </a>
 
-                <div class="glass-panel p-8 rounded-xl hover:border-[#E91E24] transition duration-300 group">
-                    <h3 class="text-xl font-bold mb-4 text-theme-heading uppercase tracking-wide group-hover:text-[#E91E24] transition">Obdelava in rekonstrukcija</h3>
-                    <p class="text-theme-muted text-sm leading-relaxed font-light">
-                        Na podlagi zajetih podatkov izdelujemo 3D modele, digitalne rekonstrukcije in vizualizacije, prilagojene različnim vsebinskim, prostorskim in drugim značilnostim dediščine.
-                    </p>
-                </div>
+                    <a href="artkit.html" class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition duration-300 block group">
+                        <h3 class="text-4xl font-extrabold text-theme-heading mb-6 group-hover:text-[#E91E24] transition-colors">artKIT</h3>
+                        <p class="text-xs font-bold uppercase tracking-widest text-theme-muted mb-4">Glavni trg 14</p>
+                        <p class="text-theme-muted text-sm leading-relaxed">
+                            Galerija in info točka. Nahaja se v zgodovinski Rotovški hiši. Namenjen je revitalizaciji starega mestnega jedra in povezovanju umetnikov.
+                        </p>
+                    </a>
 
-                <div class="glass-panel p-8 rounded-xl hover:border-[#E91E24] transition duration-300 group">
-                    <h3 class="text-xl font-bold mb-4 text-theme-heading uppercase tracking-wide group-hover:text-[#E91E24] transition">Digitalno pripovedovanje</h3>
-                    <p class="text-theme-muted text-sm leading-relaxed font-light">
-                        Razvijamo digitalne vsebine in pripovedne formate, ki kulturno dediščino umeščajo v širši zgodovinski, družbeni ali prostorski kontekst. S sodobnimi pristopi digitalnega pripovedovanja zgodb omogočamo, da dediščina postane razumljiva, dostopna in privlačna.
-                    </p>
-                </div>
-
-                <div class="glass-panel p-8 rounded-xl hover:border-[#E91E24] transition duration-300 group">
-                    <h3 class="text-xl font-bold mb-4 text-theme-heading uppercase tracking-wide group-hover:text-[#E91E24] transition">VR in AR</h3>
-                    <p class="text-theme-muted text-sm leading-relaxed font-light">
-                        Ustvarjamo interaktivne VR in AR rešitve za poglobljeno doživljanje kulturne dediščine v fizičnih in digitalnih prostorih. Primerno za muzeje, razstave, turistične predstavitve in izobraževalne programe.
-                    </p>
-                </div>
-
-                <div class="glass-panel p-8 rounded-xl hover:border-[#E91E24] transition duration-300 group">
-                    <h3 class="text-xl font-bold mb-4 text-theme-heading uppercase tracking-wide group-hover:text-[#E91E24] transition">Arhiviranje</h3>
-                    <p class="text-theme-muted text-sm leading-relaxed font-light">
-                        Digitalne vsebine pripravljamo za dolgoročno hrambo, upravljanje in nadaljnjo uporabo v digitalnih arhivih in javnih sistemih. Poudarek je na preglednosti, dostopnosti in možnosti nadgradnje.
-                    </p>
-                </div>
-
-                <div class="glass-panel p-8 rounded-xl hover:border-[#E91E24] transition duration-300 group">
-                    <h3 class="text-xl font-bold mb-4 text-theme-heading uppercase tracking-wide group-hover:text-[#E91E24] transition">Izobraževanje</h3>
-                    <p class="text-theme-muted text-sm leading-relaxed font-light">
-                        Izvajanje delavnic, usposabljanj in svetovanj s področja digitalizacije kulturne dediščine, namenjeno javnim zavodom, NVO in drugim akterjem. Programe prilagajamo različnim ravnem znanja.
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section id="tech" class="py-32">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold mb-16 italic text-center uppercase text-theme-heading">Tehno<wbr>logija <span class="text-[#E91E24]">zajema</span></h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div class="red-glass-card p-10">
-                    <h3 class="text-3xl font-bold mb-6 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">Foto<wbr>grametrija</h3>
-                    <p class="text-theme-muted mb-6 leading-relaxed">Metoda 3D zajema, ki temelji na računalniški analizi večjega števila prekrivajočih se fotografij posnetih iz več zornih kotov objekta. Programska oprema prepozna skupne točke na slikah in iz njih izračuna prostorsko geometrijo objekta, hkrati pa ustvari barvno teksturo.</p>
-                    
-                    <div class="space-y-6 text-sm">
-                        <div>
-                            <span class="text-red-500 font-bold uppercase block mb-2 tracking-widest">Prednosti:</span>
-                            <ul class="list-disc list-inside text-theme-muted space-y-1">
-                                <li>zelo kakovostna in fotorealistična barvna tekstura</li>
-                                <li>visoka vizualna prepričljivost digitalnih modelov</li>
-                                <li>primerna za natančen prikaz manjših in srednjih objektov</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <span class="text-red-500 font-bold uppercase block mb-2 tracking-widest">Specifike opreme:</span>
-                            <ul class="list-disc list-inside text-theme-muted space-y-1">
-                                <li>manj zanesljiva pri gladkih, enobarvnih, prozornih ali zelo sijočih površinah</li>
-                                <li>nižja geometrijska natančnost v primerjavi s 3D skeniranjem</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <span class="text-red-500 font-bold uppercase block mb-2 tracking-widest">Načini rabe:</span>
-                            <p class="text-theme-muted italic">Digitalno arhiviranje kipov in artefaktov, izdelava 3D modelov za spletne oglede, digitalne razstave ter uporaba v pedagoških kontekstih.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="red-glass-card p-10">
-                    <h3 class="text-3xl font-bold mb-6 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">3D Skeniranje</h3>
-                    <p class="text-theme-muted mb-6 leading-relaxed">Temelji na neposrednem merjenju razdalje med napravo in objektom s pomočjo laserskega ali svetlobnega žarka. Rezultat je izjemno natančen oblak točk ali mreža, ki zvesto prikazuje realno obliko objekta ali prostora.</p>
-                    
-                    <div class="space-y-6 text-sm">
-                        <div>
-                            <span class="text-red-500 font-bold uppercase block mb-2 tracking-widest">Prednosti:</span>
-                            <ul class="list-disc list-inside text-theme-muted space-y-1">
-                                <li>zelo visoka geometrijska in dimenzijska natančnost</li>
-                                <li>zanesljiva dokumentacija prostorskih razmerij</li>
-                                <li>primerna za strokovne, raziskovalne in tehnične namene</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <span class="text-red-500 font-bold uppercase block mb-2 tracking-widest">Specifike opreme:</span>
-                            <ul class="list-disc list-inside text-theme-muted space-y-1">
-                                <li>slabša ali omejena barvna tekstura</li>
-                                <li>večja količina podatkov in zahtevnejša obdelava</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <span class="text-red-500 font-bold uppercase block mb-2 tracking-widest">Načini rabe:</span>
-                            <p class="text-theme-muted italic">Dokumentiranje spomenikov, gradov in večjih struktur, lasersko skeniranje za analizo obstoječega stanja ter osnova za konservatorske posege in večje 3D modele.</p>
-                        </div>
-                    </div>
+                    <a href="kibla_portal.html" class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition duration-300 block group">
+                        <h3 class="text-4xl font-extrabold text-theme-heading mb-6 group-hover:text-[#E91E24] transition-colors">KIBLA PORTAL</h3>
+                        <p class="text-xs font-bold uppercase tracking-widest text-theme-muted mb-4">Valvasorjeva 40</p>
+                        <p class="text-theme-muted text-sm leading-relaxed">
+                            Veliko razstavišče. Stara industrijska hala (2000 m²), preurejena v sodobno prizorišče za velike, kompleksne intermedijske postavitve.
+                        </p>
+                    </a>
                 </div>
             </div>
+        </section>
 
-            <div class="mt-12 glass-panel p-10 rounded-xl">
-                <h3 class="text-2xl font-bold mb-4 uppercase text-theme-heading">Kombinirana raba tehnologij</h3>
-                <p class="text-theme-muted leading-relaxed font-light mb-6">
-                    Kombinirana raba fotogrametrije in 3D skeniranja združuje prednosti obeh pristopov. V praksi se 3D skeniranje uporablja za natančen zajem oblike, fotogrametrija pa za dodajanje barvne in materialne informacije. Omogoča celostno digitalno dokumentiranje, primerno za zahtevnejše in dolgoročne projekte.
-                </p>
-                <div class="text-xs text-red-500 font-bold uppercase tracking-widest">
-                    Specifike opreme:
-                    <p class="text-theme-muted leading-relaxed font-light mb-6">večja časovna in organizacijska zahtevnost.</p>
+        <section id="about" class="py-24" style="background-color: var(--section-bg); transition: background 0.4s ease;">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <h2 class="text-4xl font-extrabold mb-8 tracking-tight text-theme-heading">O KIBLI</h2>
+                <div class="text-lg font-light text-theme-muted space-y-6 leading-relaxed">
+                    <p>KIBLA je slovenska in mednarodna nevladna institucija na področju kreativnih industrij, interdisciplinarne, intermedijske, multimedijske in vizualne umetnosti, AV, glasbe, kulture in neformalnega izobraževanja.</p>
+                    <p>Predstavlja, prireja, producira, koproducira, dokumentira in arhivira kulturno-umetniške projekte ter elektronske in tiskane izdaje v zbirki TOX (od 1995) in reviji Folio (od 2009).</p>
+                    <p>Multimedijski center (MMC) KIBLA je bil ustanovljen 4. julija 1996 in od leta 1998 deluje kot KID (Kulturno izobraževalno društvo) KIBLA.</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section id="usage" class="py-32" style="background-color: var(--section-bg); transition: background 0.4s ease;">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold mb-16 italic text-center uppercase text-theme-heading">Uporaba in <span class="text-[#E91E24]">Inter<wbr>pretacija</span></h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                <!-- Item 1 -->
-                <div class="red-glass-card p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">Interaktivni 3D prikazi</h3>
-                    <p class="text-theme-muted mb-4">Omogočajo enostaven in intuitiven ogled digitalnih modelov prek spleta ali razstavnih zaslonov. Primerni so za dostopno predstavitev objektov in prostorov kar najbolj široki javnosti.</p>
-                    <details class="group">
-                        <summary class="cursor-pointer text-[#E91E24] font-bold uppercase text-xs tracking-widest flex items-center gap-2 select-none">
-                            <span>Več informacij</span>
-                            <span class="arrow transition-transform duration-300">↓</span>
-                        </summary>
-                        <div class="mt-4 text-theme-muted text-sm leading-relaxed font-light pt-4 border-t border-[var(--border-color)]">
-                            Spletni 3D pregledovalniki omogočajo dostop do digitalnih modelov kulturne dediščine neposredno prek spletnega brskalnika ali interaktivnih prikaznih sistemov, brez potrebe po nameščanju dodatne programske opreme. Uporabnikom omogočajo interaktiven ogled objektov in prostorov iz različnih zornih kotov, približevanje detajlov ter osnovno raziskovanje prostorske in vizualne strukture dediščine. V kombinaciji z interaktivnimi tablami in zasloni so posebej primerni za muzeje, izobraževalne ustanove, turistične platforme in javne arhive, saj zagotavljajo široko dostopnost, enostavno uporabo in vključevanje digitalnih vsebin v različne predstavitvene sisteme.
-                        </div>
-                    </details>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="red-glass-card p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">VR / AR izkušnje</h3>
-                    <p class="text-theme-muted mb-4">Poglobljen in doživljajski način spoznavanja vsebin v digitalnem ali fizičnem prostoru. Omogočajo sodobne oblike digitalnih predstavitev in interpretacij, ki poudarjajo uporabniško izkušnjo.</p>
-                    <details class="group">
-                        <summary class="cursor-pointer text-[#E91E24] font-bold uppercase text-xs tracking-widest flex items-center gap-2 select-none">
-                            <span>Več informacij</span>
-                            <span class="arrow transition-transform duration-300">↓</span>
-                        </summary>
-                        <div class="mt-4 text-theme-muted text-sm leading-relaxed font-light pt-4 border-t border-[var(--border-color)]">
-                            Navidezna (VR) in obogatena resničnost (AR) omogočata poglobljeno in prostorsko doživljanje kulturne dediščine z vstopom v digitalno nadgrajene ali rekonstruirane prostore ter z umeščanjem digitalnih vsebin v fizično okolje. VR uporabniku omogoča raziskovanje prostorsko in vsebinsko obogatenih okolij, AR pa dopolnjuje realni prostor z dodatnimi plastmi informacij, podobami ali pripovednimi elementi. Takšni pristopi so posebej primerni za interpretacijo kompleksnih vsebin, predstavitev zgodovinskih kontekstov ter razvoj sodobnih muzejskih, razstavnih in izobraževalnih izkušenj, kjer je poudarek na doživljanju in razumevanju, ne zgolj na ogledu.
-                        </div>
-                    </details>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="red-glass-card p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">Digitalni 3D ogledi fizičnih prostorov</h3>
-                    <p class="text-theme-muted mb-4">Zagotavljajo realističen in verodostojen vpogled v obstoječe prostore na daljavo. Uporabnikom omogočajo raziskovanje prostora ter občutek prostorske prisotnosti.</p>
-                    <details class="group">
-                        <summary class="cursor-pointer text-[#E91E24] font-bold uppercase text-xs tracking-widest flex items-center gap-2 select-none">
-                            <span>Več informacij</span>
-                            <span class="arrow transition-transform duration-300">↓</span>
-                        </summary>
-                        <div class="mt-4 text-theme-muted text-sm leading-relaxed font-light pt-4 border-t border-[var(--border-color)]">
-                            Digitalni ogledi fizičnih prostorov omogočajo realistično predstavitev obstoječih prostorov v njihovi dejanski podobi, brez vsebinskih rekonstrukcij ali interpretativnih posegov. Uporabnikom omogočajo samostojno raziskovanje prostora, orientacijo in občutek prostorske prisotnosti, kot da bi bili fizično na lokaciji. Takšen način predstavitve je posebej primeren za arhitekturno in kulturno dediščino, muzejske in razstavne prostore ter javne objekte, saj omogoča dostopen, verodostojen in dolgoročno uporaben digitalni zapis prostora za spletno predstavitev, dokumentacijo ali javno rabo.
-                        </div>
-                    </details>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="red-glass-card p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">Fizične reprodukcije</h3>
-                    <p class="text-theme-muted mb-4">Digitalno zajete modele prenašamo v otipljivo obliko, kot so makete, razstavni elementi ali 3D-tiskani objekti. Posebej uporabne so za razstavne, izobraževalne in druge javne predstavitvene namene.</p>
-                    <details class="group">
-                        <summary class="cursor-pointer text-[#E91E24] font-bold uppercase text-xs tracking-widest flex items-center gap-2 select-none">
-                            <span>Več informacij</span>
-                            <span class="arrow transition-transform duration-300">↓</span>
-                        </summary>
-                        <div class="mt-4 text-theme-muted text-sm leading-relaxed font-light pt-4 border-t border-[var(--border-color)]">
-                            Fizične in prostorske reprodukcije omogočajo prenos digitalnih modelov in artefaktov kulturne dediščine v materialno, otipljivo obliko. Kvalitetno zajeti in obdelani 3D podatki, s pomočjo 3D tiska, omogočajo natančno reprodukcijo fizičnih predstavitev v obliki pomanjšanih modelov, maket ali razstavnih elementov. Takšne reprodukcije so posebej primerne za muzeje, izobraževalne programe, razstave in delo z različnimi ciljnimi skupinami, saj omogočajo boljšo prostorsko predstavo, večjo dostopnost vsebin ter uporabo digitalne dediščine tudi v fizičnem, javnem prostoru.
-                        </div>
-                    </details>
-                </div>
-
-                <!-- Item 5 -->
-                <div class="red-glass-card p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">Hibridno pripovedovanje zgodb</h3>
-                    <p class="text-theme-muted mb-4">Digitalne vsebine povezujemo z jasno in razumljivo pripovedjo. Pri tem nudimo podporo pri zasnovi in usmerjanju zgodb, ki vsebine približajo različnim ciljnim skupinam na sodoben način.</p>
-                    <details class="group">
-                        <summary class="cursor-pointer text-[#E91E24] font-bold uppercase text-xs tracking-widest flex items-center gap-2 select-none">
-                            <span>Več informacij</span>
-                            <span class="arrow transition-transform duration-300">↓</span>
-                        </summary>
-                        <div class="mt-4 text-theme-muted text-sm leading-relaxed font-light pt-4 border-t border-[var(--border-color)]">
-                            Hibridno pripovedovanje in ustvarjanje zgodb združuje digitalne vsebine z jasno, razumljivo in privlačno pripovedjo. Kulturno dediščino ne obravnavamo zgolj kot niz podatkov ali vizualnih zapisov, temveč kot izhodišče za zgodbe, ki jih skupaj z naročniki razvijamo, oblikujemo in usmerjamo glede na namen in ciljno publiko. Z uporabo različnih digitalnih formatov – od 3D prikazov in prostorskih ogledov do interaktivnih vsebin – pomagamo pri zasnovi pripovednih konceptov, ki dediščino umestijo v širši kulturni, zgodovinski ali lokalni kontekst ter jo približajo sodobnim uporabnikom na razumljiv in angažiran način.
-                        </div>
-                    </details>
-                </div>
-
-                <!-- Item 6 -->
-                <div class="red-glass-card p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-theme-heading uppercase border-b border-[var(--border-color)] pb-4">Strokovna in razvojna raba</h3>
-                    <p class="text-theme-muted mb-4">Služi kot podlaga za analizo, načrtovanje in razvoj na različnih strokovnih področjih. Podpira delo v raziskovalnih, konservatorskih, arhitekturnih in oblikovalskih procesih.</p>
-                    <details class="group">
-                        <summary class="cursor-pointer text-[#E91E24] font-bold uppercase text-xs tracking-widest flex items-center gap-2 select-none">
-                            <span>Več informacij</span>
-                            <span class="arrow transition-transform duration-300">↓</span>
-                        </summary>
-                        <div class="mt-4 text-theme-muted text-sm leading-relaxed font-light pt-4 border-t border-[var(--border-color)]">
-                            Digitalni modeli, prostorski podatki in drugi digitalni zapisi omogočajo natančno preučevanje oblik, meril in prostorskih razmerij, kar je ključno pri raziskovalnem, konservatorskem, arhitekturnem in oblikovalskem delu. Digitalno zajete vsebine se lahko uporabljajo kot referenčni material ali delovna podlaga za analize, simulacije, načrtovanje in razvoj na različnih strokovnih področjih. Takšna raba je posebej primerna za projekte, kjer so pomembni verodostojnost podatkov, sledljivost sprememb in dolgoročna uporaba digitalnih zapisov. Digitalni modeli omogočajo povezovanje različnih strokovnih pogledov ter lažje sodelovanje med deležniki, saj so dostopni, prilagodljivi in primerni za nadaljnje nadgradnje v skladu z razvojnimi in strokovnimi cilji projekta.
-                        </div>
-                    </details>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="py-32">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-extrabold mb-6 uppercase tracking-tighter text-theme-heading">Kontakt</h2>
-                <p class="text-xl font-light text-theme-muted">
-                    Kontaktirajte nas, da skupaj določimo najboljšo strategijo.
-                </p>
-            </div>
-
-            <div class="glass-panel p-8 md:p-12 rounded-xl">
-                <form action="mailto:kibla@kibla.org" method="POST" enctype="text/plain" class="space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="space-y-2">
-                            <label for="ime" class="text-xs font-bold uppercase tracking-widest text-theme-muted">Ime</label>
-                            <input type="text" id="ime" name="ime" class="input-field" placeholder="Janez Novak" required>
-                        </div>
-                        <div class="space-y-2">
-                            <label for="email" class="text-xs font-bold uppercase tracking-widest text-theme-muted">E-pošta</label>
-                            <input type="email" id="email" name="email" class="input-field" placeholder="janez@primer.si" required>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label for="sporocilo" class="text-xs font-bold uppercase tracking-widest text-theme-muted">Sporočilo</label>
-                        <textarea id="sporocilo" name="sporocilo" rows="5" class="input-field" placeholder="Vaše sporočilo..." required></textarea>
-                    </div>
-
-                    <div class="space-y-2">
-                        <span class="text-xs font-bold uppercase tracking-widest text-theme-muted">Dodaj sliko (neobvezno)</span>
-                        <div class="flex items-center gap-4 pt-1">
-                            <input type="file" id="priponka" name="priponka" class="hidden" accept="image/*" onchange="document.getElementById('file-name').textContent = this.files[0] ? this.files[0].name : 'Ni izbrane datoteke'">
-                            <label for="priponka" class="cursor-pointer px-8 py-3 bg-red-900 text-white font-bold uppercase tracking-widest rounded-lg hover:bg-red-800 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-900/20 text-sm">Naloži</label>
-                            <span id="file-name" class="text-theme-muted text-sm italic">Ni izbrane datoteke</span>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="submit" class="w-full md:w-auto px-8 py-3 bg-[#E91E24] text-white font-bold uppercase tracking-widest rounded-lg hover:bg-red-700 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/20 text-sm">
-                            Pošlji
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <footer class="py-20 border-t border-[var(--border-color)] text-center">
         <div class="flex items-center justify-center space-x-2 mb-8">
             <div class="w-10 h-10 bg-[#E91E24] rounded-sm flex items-center justify-center font-bold text-xl text-white">K</div>
-            <span class="text-3xl font-extrabold tracking-tight uppercase text-theme-heading">KIBLA2LAB</span>
+            <span class="text-3xl font-extrabold tracking-tight uppercase text-theme-heading">KIBLA</span>
         </div>
+        
+        <div class="text-theme-muted text-sm space-y-2 mb-8 font-light">
+            <p>Ulica kneza Koclja 9, 2000 Maribor, Slovenija</p>
+            <p>kibla@kibla.org | +386 59 076 371</p>
+        </div>
+
+        <div class="flex justify-center space-x-6 mb-8 text-xs font-bold uppercase tracking-widest text-theme-muted">
+            <a href="#" class="hover:text-[#E91E24] transition">Facebook</a>
+            <a href="#" class="hover:text-[#E91E24] transition">Instagram</a>
+            <a href="#" class="hover:text-[#E91E24] transition">YouTube</a>
+        </div>
+
+        <p class="text-theme-muted text-xs tracking-widest uppercase opacity-60">© 2024 KID KIBLA. Vse pravice pridržane.</p>
     </footer>
 
     <script>
+        function loadTheme() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+            }
+        }
         function toggleTheme() {
             const body = document.body;
             body.classList.toggle('light-mode');
+            if (body.classList.contains('light-mode')) {
+                localStorage.setItem('theme', 'light');
+            } else {
+                localStorage.setItem('theme', 'dark');
+            }
         }
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('open');
+        }
+
+        loadTheme();
     </script>
 
 </body>

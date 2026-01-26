@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIBLA PORTAL | KID KIBLA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hr-red: #E91E24;
+            --bg-color: #060809;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --panel-bg: rgba(255, 255, 255, 0.02);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --section-bg: #0b0e10;
+            --card-hover-bg: rgba(233, 30, 36, 0.05);
+            --heading-color: #ffffff;
+            --icon-color: #ffffff;
+        }
+        .light-mode {
+            --bg-color: #f9fafb;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --panel-bg: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --section-bg: #ffffff;
+            --card-hover-bg: rgba(233, 30, 36, 0.05);
+            --heading-color: #111827;
+            --icon-color: #111827;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.4s ease, color 0.4s ease; }
+        .text-theme-heading { color: var(--heading-color); }
+        .text-theme-muted { color: var(--text-muted); }
+        .glass-nav { background: var(--panel-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); }
+        .glass-panel { background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid var(--border-color); transition: all 0.3s ease; }
+        .glass-panel:hover { border-color: var(--hr-red); background: var(--card-hover-bg); }
+        
+        #theme-toggle { position: fixed; right: 24px; top: 100px; z-index: 100; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--border-color); background: var(--panel-bg); backdrop-filter: blur(10px); transition: all 0.3s; color: var(--icon-color); }
+        #theme-toggle:hover { border-color: var(--hr-red); color: var(--hr-red); }
+        .toggle-icon { width: 20px; height: 20px; stroke-width: 1.5; }
+        .light-mode .icon-moon { display: block; } .light-mode .icon-sun { display: none; }
+        .icon-moon { display: none; } .icon-sun { display: block; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <button id="theme-toggle" onclick="toggleTheme()">
+        <svg class="toggle-icon icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+        <svg class="toggle-icon icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+    </button>
+
+    <nav class="fixed w-full z-50 glass-nav top-0">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="w-8 h-8 bg-[#E91E24] rounded-sm flex items-center justify-center font-bold text-white group-hover:bg-white group-hover:text-[#E91E24] transition">K</div>
+                <span class="text-xl font-extrabold tracking-tight text-theme-heading">KIBLA</span>
+            </a>
+            <div class="flex space-x-6 text-sm font-semibold tracking-wide uppercase">
+                <a href="index.html#venues" class="text-theme-muted hover:text-[#E91E24] transition">← Nazaj na razstavišča</a>
+            </div>
+        </div>
+    </nav>
+
+    <a href="exhibition.html" class="group relative w-full h-[60vh] flex items-end justify-start block">
+        <div class="absolute inset-0 w-full h-full overflow-hidden">
+            <img src="src/4.jpg" alt="Portal Exhibition" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition duration-700 ease-in-out">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-color)] via-[var(--bg-color)]/30 to-transparent"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 pb-24 w-full">
+            <div class="flex items-center space-x-3 mb-4">
+                <span class="bg-[#E91E24] text-white px-3 py-1 text-xs font-bold uppercase tracking-widest rounded">Tekoča razstava</span>
+                <span class="text-white/80 text-xs font-bold uppercase tracking-widest group-hover:text-white transition">Klikni za več →</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-2 text-theme-heading leading-tight group-hover:text-[#E91E24] transition duration-300">
+                MFRU 2025
+            </h1>
+            <p class="text-xl text-theme-muted font-light">Do 30. 10. 2025</p>
+        </div>
+    </a>
+
+    <main class="py-20">
+        <section class="max-w-4xl mx-auto px-6 mb-32">
+            <div class="glass-panel p-12 md:p-20 rounded-xl">
+                <h2 class="text-3xl font-bold mb-6 text-theme-heading">KIBLA PORTAL</h2>
+                <p class="text-sm font-bold uppercase tracking-widest text-[#E91E24] mb-6">Valvasorjeva 40, Maribor</p>
+                <div class="text-lg text-theme-muted leading-relaxed space-y-4 font-light">
+                    <p>Veliko razstavišče v stari industrijski hali, ki meri kar 2000 m². Odprt leta 2012 v okviru Evropske prestolnice kulture.</p>
+                    <p>Portal je namenjen velikim, kompleksnim intermedijskim postavitvam in mednarodnim razstavam, ki zahtevajo specifične prostorske pogoje in monumentalne inštalacije.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-6 mb-20">
+            <div class="flex justify-between items-end mb-16 border-b border-[var(--border-color)] pb-6">
+                <h2 class="text-4xl font-extrabold uppercase tracking-tight text-theme-heading">Pretekle Razstave</h2>
+                <a href="#" class="hidden md:block text-sm font-bold uppercase text-theme-muted hover:text-[#E91E24] transition">Celoten arhiv →</a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+                
+                <a href="exhibition.html" class="group block cursor-pointer">
+                    <div class="relative w-full h-80 overflow-hidden rounded-md mb-6 bg-gray-900">
+                        <div class="absolute top-4 right-4 z-20 bg-black/60 backdrop-blur-md border border-white/10 px-3 py-1">
+                            <span class="text-xs font-mono font-bold text-white">2024</span>
+                        </div>
+                        <img src="src/1.jpg" class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100">
+                    </div>
+                    
+                    <div class="border-b border-[var(--border-color)] pb-6 group-hover:border-[#E91E24] transition duration-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-bold text-theme-heading mb-2 group-hover:text-[#E91E24] transition-colors">MFRU 2024</h3>
+                                <p class="text-theme-muted font-light line-clamp-2">30. Mednarodni festival računalniške umetnosti: Povezljivost.</p>
+                            </div>
+                            <div class="text-theme-muted group-hover:text-[#E91E24] transform group-hover:translate-x-2 group-hover:-translate-y-2 transition duration-300">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="exhibition.html" class="group block cursor-pointer">
+                    <div class="relative w-full h-80 overflow-hidden rounded-md mb-6 bg-gray-900">
+                        <div class="absolute top-4 right-4 z-20 bg-black/60 backdrop-blur-md border border-white/10 px-3 py-1">
+                            <span class="text-xs font-mono font-bold text-white">2023</span>
+                        </div>
+                        <img src="src/2.jpg" class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100">
+                    </div>
+                    
+                    <div class="border-b border-[var(--border-color)] pb-6 group-hover:border-[#E91E24] transition duration-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-bold text-theme-heading mb-2 group-hover:text-[#E91E24] transition-colors">KIBLIX 2023</h3>
+                                <p class="text-theme-muted font-light line-clamp-2">Festival umetnosti, tehnologije in znanosti: Obrazi prihodnosti.</p>
+                            </div>
+                            <div class="text-theme-muted group-hover:text-[#E91E24] transform group-hover:translate-x-2 group-hover:-translate-y-2 transition duration-300">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                 <a href="exhibition.html" class="group block cursor-pointer">
+                    <div class="relative w-full h-80 overflow-hidden rounded-md mb-6 bg-gray-900">
+                        <div class="absolute top-4 right-4 z-20 bg-black/60 backdrop-blur-md border border-white/10 px-3 py-1">
+                            <span class="text-xs font-mono font-bold text-white">2022</span>
+                        </div>
+                        <img src="src/3.jpg" class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100">
+                    </div>
+                    
+                    <div class="border-b border-[var(--border-color)] pb-6 group-hover:border-[#E91E24] transition duration-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-bold text-theme-heading mb-2 group-hover:text-[#E91E24] transition-colors">MIG 21</h3>
+                                <p class="text-theme-muted font-light line-clamp-2">Mednarodna razstava na temo migracij in umetnosti v globalnem svetu.</p>
+                            </div>
+                            <div class="text-theme-muted group-hover:text-[#E91E24] transform group-hover:translate-x-2 group-hover:-translate-y-2 transition duration-300">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="exhibition.html" class="group block cursor-pointer">
+                    <div class="relative w-full h-80 overflow-hidden rounded-md mb-6 bg-gray-900">
+                        <div class="absolute top-4 right-4 z-20 bg-black/60 backdrop-blur-md border border-white/10 px-3 py-1">
+                            <span class="text-xs font-mono font-bold text-white">2021</span>
+                        </div>
+                        <img src="src/4.jpg" class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100">
+                    </div>
+                    
+                    <div class="border-b border-[var(--border-color)] pb-6 group-hover:border-[#E91E24] transition duration-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-bold text-theme-heading mb-2 group-hover:text-[#E91E24] transition-colors">Zbirka KIBLA</h3>
+                                <p class="text-theme-muted font-light line-clamp-2">Izbor del iz stalne zbirke KID KIBLA - 25 let delovanja.</p>
+                            </div>
+                            <div class="text-theme-muted group-hover:text-[#E91E24] transform group-hover:translate-x-2 group-hover:-translate-y-2 transition duration-300">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-20 border-t border-[var(--border-color)] text-center mt-12">
+        <p class="text-theme-muted text-xs tracking-widest uppercase opacity-60">© 2024 KID KIBLA.</p>
+    </footer>
+
+    <script>
+        function loadTheme() { const theme = localStorage.getItem('theme'); if (theme === 'light') document.body.classList.add('light-mode'); }
+        function toggleTheme() { const body = document.body; body.classList.toggle('light-mode'); localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark'); }
+        loadTheme();
+    </script>
+</body>
+</html>
